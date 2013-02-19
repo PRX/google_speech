@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+require 'google_speech'
+
+if ARGV[0].nil? || !File.exist?(ARGV[0])
+  STDERR.puts "usage: #{$0} input.wav"
+  exit(1)
+end
+
+f = File.open ARGV[0]
+transcriber = GoogleSpeech::Transcriber.new(f)
+t = transcriber.transcribe
+puts t.inspect
