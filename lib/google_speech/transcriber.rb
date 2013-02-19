@@ -32,7 +32,7 @@ module GoogleSpeech
         result[:confidence] = transcript['hypotheses'].first['confidence']
         @results << result
 
-        puts "\n#{result[:start_time]} - #{result[:start_time].to_i + result[:duration].to_i}: #{(result[:confidence].to_f * 100).to_i}%: #{result[:text]}"
+        # puts "\n#{result[:start_time]} - #{result[:start_time].to_i + result[:duration].to_i}: #{(result[:confidence].to_f * 100).to_i}%: #{result[:text]}"
 
         sleep(options[:request_pause].to_i)
       }
