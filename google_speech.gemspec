@@ -12,7 +12,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["andrew@prx.org"]
   gem.description   = %q{This is a gem to call the google speech api.}
   gem.summary       = %q{This is a gem to call the google speech api.}
-  gem.homepage      = ""
+  gem.homepage      = "https://github.com/PRX/google_speech"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
