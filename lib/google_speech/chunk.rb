@@ -20,7 +20,7 @@ module GoogleSpeech
     def to_hash
       {
         :start_time => @start_time,
-        :duration => @duration
+        :end_time => @start_time + @duration
       }
     end
 

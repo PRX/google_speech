@@ -38,7 +38,7 @@ Options:
 	* overlap - chunking does not respect word boundaries; overlap can compensate
 	* max_results - # of results to request of speech api
 	* request_pause - sleep seconds between chunk transcription requests
-	* profanity_filter - google by default filters profanity, this gem does not
+	* profanity_filter - google by default filters profanity; this gem does not.
 
 Default option values:
 	{
