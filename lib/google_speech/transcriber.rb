@@ -28,8 +28,9 @@ module GoogleSpeech
       chunk_factory.each{ |chunk|
         result = chunk.to_hash
         transcript = transcribe_data(chunk.data)
-        result[:text] = transcript['hypotheses'].first['utterance']
-        result[:confidence] = transcript['hypotheses'].first['confidence']
+        hypothesis = transcript['hypotheses'].first || Hash.new("")
+        result[:text]       = hypothesis['utterance']
+        result[:confidence] = hypothesis['confidence']
         @results << result
 
         # puts "\n#{result[:start_time]} - #{result[:start_time].to_i + result[:duration].to_i}: #{(result[:confidence].to_f * 100).to_i}%: #{result[:text]}"
