@@ -26,20 +26,22 @@ Or install it yourself as:
 
 ## Usage
 
-As a gem in yourt code:
+As a gem in your code:
 
+```ruby
+require 'google_speech'
 
-	require 'google_speech'
-	
-	f = File.open '/Users/you/Downloads/audio.wav'
-  	transcriber = GoogleSpeech::Transcriber.new(f)
-  	t = transcriber.transcribe
+f = File.open '/Users/you/Downloads/audio.wav'
+transcriber = GoogleSpeech::Transcriber.new(f)
+t = transcriber.transcribe
+```
 
 As a command line tool
 
 	> google_speech somefile.wav
 
-Options:
+### Options:
+
 * language - what language is the speech in
 * chunk_duration - length in seconds for each audio chunk of the wav to send
 * overlap - chunking does not respect word boundaries; overlap can compensate
@@ -47,16 +49,18 @@ Options:
 * request_pause - sleep seconds between chunk transcription requests
 * profanity_filter - google by default filters profanity; this gem does not.
 
-Default option values:
+### Default option values:
 
-	{
-		:language         => 'en-US',
-		:chunk_duration   => 8,
-		:overlap          => 1,
-		:max_results      => 2,
-		:request_pause    => 1,
-		:profanity_filter => false
-	}
+```ruby
+{
+	:language         => 'en-US',
+	:chunk_duration   => 8,
+	:overlap          => 1,
+	:max_results      => 2,
+	:request_pause    => 1,
+	:profanity_filter => false
+}
+```
 
 ## Contributing
 
