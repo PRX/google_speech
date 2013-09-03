@@ -10,7 +10,7 @@ module GoogleSpeech
 
     DEFAULT_OPTIONS =   {
       :language         => 'en-US',
-      :chunk_duration   => 8,
+      :chunk_duration   => 5,
       :overlap          => 1,
       :max_results      => 2,
       :request_pause    => 1,
@@ -28,12 +28,14 @@ module GoogleSpeech
       chunk_factory.each{ |chunk|
         result = chunk.to_hash
         transcript = transcribe_data(chunk.data)
+        next unless transcript
+        # puts "transcript: #{transcript.inspect}\n\n"
         hypothesis = transcript['hypotheses'].first || Hash.new("")
         result[:text]       = hypothesis['utterance']
         result[:confidence] = hypothesis['confidence']
         @results << result
 
-        # puts "\n#{result[:start_time]} - #{result[:start_time].to_i + result[:duration].to_i}: #{(result[:confidence].to_f * 100).to_i}%: #{result[:text]}"
+        # puts "\n#{result[:start_time]}: #{(result[:confidence].to_f * 100).to_i}%: #{result[:text]}"
 
         sleep(options[:request_pause].to_i)
       }
@@ -66,8 +68,10 @@ module GoogleSpeech
       while(!result && retry_count < retry_max)
         connection = Excon.new(url)
         response = connection.request(params)
+        # puts "response: #{response.inspect}\n\n"
         if response.status.to_s.start_with?('2')
-          result = JSON.parse(response.body)          
+          result = JSON.parse(response.body)
+          # puts "results: #{result.inspect}\n\n"
         else
           sleep(1)
           retry_count += 1
