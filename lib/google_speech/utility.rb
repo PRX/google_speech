@@ -23,9 +23,9 @@ module GoogleSpeech
       def trim_to_flac(wav_path, duration, flac_path, start, length)
         check_local_file(wav_path)
 
-        #command = "sox -t wav '#{wav_path}' -r 16000 -c 1 -t flac '#{flac_path}' trim #{start.to_i} #{length.to_i} compand .5,2 -80,-80,-75,-50,-30,-15,0,0 norm -0.1"
+        command = "sox -t wav '#{wav_path}' -r 16000 -c 1 -t flac '#{flac_path}' trim #{start.to_i} #{length.to_i} compand .5,2 -80,-80,-75,-50,-30,-15,0,0 norm -0.1"
 
-        command = "sox -t wav '#{wav_path}' -t flac '#{flac_path}' trim #{start.to_i} #{length.to_i} rate 16k"
+        # command = "sox -t wav '#{wav_path}' -t flac '#{flac_path}' trim #{start.to_i} #{length.to_i} rate 16k"
         
         out, err = run_command(command)
         response = out + err
