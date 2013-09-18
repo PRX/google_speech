@@ -8,7 +8,7 @@ module GoogleSpeech
 
   class Utility
 
-    SOX_ERROR_RE       = /error:/
+    SOX_ERROR_RE = /error:/
 
     class <<self
 
@@ -50,7 +50,7 @@ module GoogleSpeech
         
         cmd = "#{nice}#{command}#{echo_return}"
         
-        # logger.debug "run_command:  #{cmd}"
+        logger.info "google_speech - run_command: #{cmd}"
         begin
           result = Timeout::timeout(timeout) {
             Open3::popen3(cmd) do |i,o,e|

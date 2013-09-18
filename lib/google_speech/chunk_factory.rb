@@ -22,6 +22,10 @@ module GoogleSpeech
         pos = pos + [chunk.duration, @chunk_duration].min
       end
     end
-  end
 
+    def logger
+      GoogleSpeech::Utility.logger
+    end
+
+  end
 end

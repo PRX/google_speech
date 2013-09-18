@@ -29,13 +29,12 @@ module GoogleSpeech
         result = chunk.to_hash
         transcript = transcribe_data(chunk.data)
         next unless transcript
-        # puts "transcript: #{transcript.inspect}\n\n"
         hypothesis = transcript['hypotheses'].first || Hash.new("")
         result[:text]       = hypothesis['utterance']
         result[:confidence] = hypothesis['confidence']
         @results << result
 
-        # puts "\n#{result[:start_time]}: #{(result[:confidence].to_f * 100).to_i}%: #{result[:text]}"
+        logger.debug "#{result[:start_time]}: #{(result[:confidence].to_f * 100).to_i}%: #{result[:text]}"
 
         sleep(options[:request_pause].to_i)
       }
@@ -81,6 +80,9 @@ module GoogleSpeech
       result
     end
 
-  end
+    def logger
+      GoogleSpeech::Utility.logger
+    end
 
+  end
 end

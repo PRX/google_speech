@@ -27,6 +27,10 @@ module GoogleSpeech
     def data
       @data ||= @chunk_file.read
     end
-  end
 
+    def logger
+      GoogleSpeech::Utility.logger
+    end
+
+  end
 end
