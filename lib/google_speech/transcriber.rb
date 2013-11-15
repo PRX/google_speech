@@ -29,16 +29,29 @@ module GoogleSpeech
         result = chunk.to_hash
         transcript = transcribe_data(chunk.data)
         next unless transcript
-        hypothesis = transcript['hypotheses'].first || Hash.new("")
-        result[:text]       = hypothesis['utterance']
-        result[:confidence] = hypothesis['confidence']
-        @results << result
+
+        result = result.merge(extract_result(transcript))
 
         logger.debug "#{result[:start_time]}: #{(result[:confidence].to_f * 100).to_i}%: #{result[:text]}"
+
+        @results << result
 
         sleep(options[:request_pause].to_i)
       }
       @results
+    end
+
+    def extract_result(transcripts)
+      results = transcripts.map{|t| result_from_transcript(t)}.compact
+      {
+        :text       => results.collect {|t| t[:text] }.join(' '),
+        :confidence => results.inject(0.0) {|s, t| s + t[:confidence].to_f } / results.size
+      }
+    end
+
+    def result_from_transcript(transcript)
+      hyp = transcript['hypotheses'].first
+      hyp ? { :text => hyp['utterance'], :confidence => hyp['confidence'] } : nil
     end
 
     def pfilter
@@ -68,9 +81,12 @@ module GoogleSpeech
         connection = Excon.new(url)
         response = connection.request(params)
         # puts "response: #{response.inspect}\n\n"
+        # puts "response.body: #{response.body}\n\n"
         if response.status.to_s.start_with?('2')
-          result = JSON.parse(response.body)
-          # puts "results: #{result.inspect}\n\n"
+          if (response.body && response.body.size > 0)
+            result = response.body.split("\n").collect{|b| JSON.parse(b)}
+            # puts "results #{result.count}: #{result.inspect}\n\n"
+          end
         else
           sleep(1)
           retry_count += 1
