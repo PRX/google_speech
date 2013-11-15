@@ -43,10 +43,14 @@ module GoogleSpeech
 
     def extract_result(transcripts)
       results = transcripts.map{|t| result_from_transcript(t)}.compact
-      {
-        :text       => results.collect {|t| t[:text] }.join(' '),
-        :confidence => results.inject(0.0) {|s, t| s + t[:confidence].to_f } / results.size
-      }
+
+      return {:text => '', :confidence => 0} if results.size == 0
+
+      t = results.collect {|t| t[:text] }.join(' ')
+      c = results.inject(0.0) {|s, t| s.to_f + t[:confidence].to_f } / results.size.to_f
+      c = 0 if c.nan? || c.infinite?
+
+      { :text => t, :confidence => c }
     end
 
     def result_from_transcript(transcript)
