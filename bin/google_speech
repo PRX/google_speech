@@ -2,6 +2,8 @@
 
 require 'google_speech'
 
+GoogleSpeech.logger = Logger.new(STDOUT)
+
 if ARGV[0].nil? || !File.exist?(ARGV[0])
   STDERR.puts "usage: #{$0} input.wav"
   exit(1)
