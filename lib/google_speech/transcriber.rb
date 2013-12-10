@@ -12,9 +12,9 @@ module GoogleSpeech
       :language         => 'en-US',
       :chunk_duration   => 5,
       :overlap          => 1,
-      :max_results      => 2,
+      :max_results      => 1,
       :request_pause    => 1,
-      :profanity_filter => false
+      :profanity_filter => true
     }
 
     def initialize(original_file, options=nil)
@@ -64,9 +64,6 @@ module GoogleSpeech
 
     def transcribe_data(data)
       params = {
-        :scheme   => 'https',
-        :host     => 'www.google.com',
-        :port     => 443,
         :path     => "/speech-api/v1/recognize",
         :query    => "xjerr=1&client=google_speech&lang=#{options[:language]}&maxresults=#{options[:max_results].to_i}&pfilter=#{pfilter}",
         :body     => data,
@@ -80,28 +77,36 @@ module GoogleSpeech
       retry_max = options[:retry_max] ? [options[:retry_max].to_i, 1].max : 3
       retry_count = 0
       result = nil
-      url = "#{params[:scheme]}://#{params[:host]}:#{params[:port]}#{params[:path]}"
+      url = "https://www.google.com:443#{params[:path]}"
       while(!result && retry_count < retry_max)
-        connection = Excon.new(url)
-        response = connection.request(params)
-        # puts "response: #{response.inspect}\n\n"
-        # puts "response.body: #{response.body}\n\n"
-        if response.status.to_s.start_with?('2')
-          if (response.body && response.body.size > 0)
-            result = response.body.split("\n").collect{|b| JSON.parse(b)}
-            # puts "results #{result.count}: #{result.inspect}\n\n"
+        retry_count += 1
+
+        begin
+          connection = Excon.new(url)
+          response = connection.request(params)
+          # puts "response: #{response.inspect}\n\n"
+          # puts "response.body: #{response.body}\n\n"
+          if response.status.to_s.start_with?('2')
+            result = []
+            if (response.body && response.body.size > 0)
+              result = response.body.split("\n").collect{|b| JSON.parse(b)} rescue []
+            end
+          else
+            sleep(1) 
           end
-        else
+        rescue Exception => err
+          #need to do something to retry this - use new a13g func for this.
+          logger.error "transcribe_data retrycount(#{retry_count}): error: #{err.message}"
           sleep(1)
-          retry_count += 1
         end
+
       end
 
-      result
+      result || []
     end
 
     def logger
-      GoogleSpeech::Utility.logger
+      GoogleSpeech.logger
     end
 
   end

@@ -2,7 +2,6 @@
 
 require 'tempfile'
 require 'open3'
-require 'logger'
 
 module GoogleSpeech
 
@@ -83,11 +82,7 @@ module GoogleSpeech
       end
 
       def logger
-        @logger ||= Logger.new(STDOUT)
-      end
-
-      def logger=(l)
-        @logger = l
+        GoogleSpeech.logger        
       end
 
     end    

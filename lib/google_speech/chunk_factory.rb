@@ -24,7 +24,7 @@ module GoogleSpeech
     end
 
     def logger
-      GoogleSpeech::Utility.logger
+      GoogleSpeech.logger
     end
 
   end
