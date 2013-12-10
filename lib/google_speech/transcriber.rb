@@ -92,9 +92,10 @@ module GoogleSpeech
               result = response.body.split("\n").collect{|b| JSON.parse(b)} rescue []
             end
           else
+            logger.error "transcribe_data response unsuccessful, status: #{response.status}, response: #{response.inspect}"
             sleep(1) 
           end
-        rescue Exception => err
+        rescue StandardError => err
           #need to do something to retry this - use new a13g func for this.
           logger.error "transcribe_data retrycount(#{retry_count}): error: #{err.message}"
           sleep(1)
