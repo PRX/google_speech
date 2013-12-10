@@ -11,7 +11,7 @@ module GoogleSpeech
     DEFAULT_OPTIONS =   {
       :language         => 'en-US',
       :chunk_duration   => 5,
-      :overlap          => 1,
+      :overlap          => 0.5,
       :max_results      => 1,
       :request_pause    => 1,
       :profanity_filter => true

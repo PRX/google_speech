@@ -9,9 +9,9 @@ module GoogleSpeech
 
     def initialize(original_file, original_duration, start_time, duration)
       @original_file = original_file
-      @original_duration = original_duration.to_i
-      @start_time = start_time.to_i
-      @duration = [duration.to_i, (@original_duration - @start_time)].min
+      @original_duration = original_duration
+      @start_time = start_time
+      @duration = [duration, (@original_duration - @start_time)].min
       @chunk_file = Tempfile.new([File.basename(@original_file), '.flac'])
       # puts "@chunk_file: #{@chunk_file.path}"
       Utility.trim_to_flac(@original_file.path, @duration, @chunk_file.path, @start_time, @duration)

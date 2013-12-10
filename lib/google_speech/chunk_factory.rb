@@ -7,10 +7,10 @@ module GoogleSpeech
     attr_accessor :original_file, :chunk_duration, :overlap
 
     def initialize(original_file, chunk_duration=8, overlap=1)
-      @chunk_duration    = chunk_duration.to_i
+      @chunk_duration    = chunk_duration
       @original_file     = original_file
       @overlap           = overlap
-      @original_duration = GoogleSpeech::Utility.audio_file_duration(@original_file.path).to_i
+      @original_duration = GoogleSpeech::Utility.audio_file_duration(@original_file.path)
     end
 
     # return temp file for each chunk
