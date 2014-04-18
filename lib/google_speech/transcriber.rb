@@ -65,13 +65,13 @@ module GoogleSpeech
     def transcribe_data(data)
       params = {
         :path     => "/speech-api/v1/recognize",
-        :query    => "xjerr=1&client=google_speech&lang=#{options[:language]}&maxresults=#{options[:max_results].to_i}&pfilter=#{pfilter}",
+        :query    => "xjerr=1&client=chromium&lang=#{options[:language]}&maxresults=#{options[:max_results].to_i}&pfilter=#{pfilter}",
         :body     => data,
         :method   => 'POST',
         :headers  => {
-          'Content-Type'   => 'audio/x-flac; rate=16000',
+          'Content-Type'   => 'audio/x-flac; rate=8000',
           'Content-Length' => data.bytesize,
-          'User-Agent'     => "google_speech"
+          'User-Agent'     => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1664.3 Safari/537.36"
         }
       }
       retry_max = options[:retry_max] ? [options[:retry_max].to_i, 1].max : 3
