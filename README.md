@@ -1,5 +1,7 @@
 # GoogleSpeech
 
+[![Build Status](https://travis-ci.org/PRX/google_speech.svg)](https://travis-ci.org/PRX/google_speech)
+
 This is a gem to call the google speech api.
 
 The gem expects pcm wav audio.
