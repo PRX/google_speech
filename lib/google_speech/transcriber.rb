@@ -9,6 +9,7 @@ module GoogleSpeech
     attr_accessor :original_file, :options, :results
 
     DEFAULT_OPTIONS =   {
+      :key              => 'AIzaSyCnl6MRydhw_5fLXIdASxkLJzcJh5iX0M4',
       :language         => 'en-US',
       :chunk_duration   => 5,
       :overlap          => 0.5,
@@ -54,8 +55,8 @@ module GoogleSpeech
     end
 
     def result_from_transcript(transcript)
-      hyp = transcript['hypotheses'].first
-      hyp ? { :text => hyp['utterance'], :confidence => hyp['confidence'] } : nil
+      alt = transcript['result'].first['alternative'].first rescue nil
+      alt ? { :text => alt['transcript'], :confidence => (alt['confidence'] || '0.9')  } : nil
     end
 
     def pfilter
@@ -64,8 +65,8 @@ module GoogleSpeech
 
     def transcribe_data(data)
       params = {
-        :path     => "/speech-api/v1/recognize",
-        :query    => "xjerr=1&client=chromium&lang=#{options[:language]}&maxresults=#{options[:max_results].to_i}&pfilter=#{pfilter}",
+        :path     => "/speech-api/v2/recognize",
+        :query    => "output=json&client=chromium&lang=#{options[:language]}&key=#{options[:key]}",
         :body     => data,
         :method   => 'POST',
         :headers  => {
@@ -85,7 +86,7 @@ module GoogleSpeech
           connection = Excon.new(url)
           response = connection.request(params)
           # puts "response: #{response.inspect}\n\n"
-          # puts "response.body: #{response.body}\n\n"
+          # puts "response.body:\nSTART\n#{response.body}\nEND\n#{response.body.class.name}"
           if response.status.to_s.start_with?('2')
             result = []
             if (response.body && response.body.size > 0)
