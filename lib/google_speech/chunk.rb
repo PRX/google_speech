@@ -5,16 +5,17 @@ require 'tempfile'
 module GoogleSpeech
 
   class Chunk
-    attr_accessor :original_file, :original_duration, :start_time, :duration, :chunk_file
+    attr_accessor :original_file, :original_duration, :start_time, :duration, :chunk_file, :rate
 
-    def initialize(original_file, original_duration, start_time, duration)
-      @original_file = original_file
+    def initialize(original_file, original_duration, start_time, duration, rate)
+      @original_file     = original_file
       @original_duration = original_duration
-      @start_time = start_time
-      @duration = [duration, (@original_duration - @start_time)].min
-      @chunk_file = Tempfile.new([File.basename(@original_file), '.flac'])
+      @start_time        = start_time
+      @duration          = [duration, (@original_duration - @start_time)].min
+      @rate              = rate
+      @chunk_file        = Tempfile.new([File.basename(@original_file), '.wav'])
       # puts "@chunk_file: #{@chunk_file.path}"
-      Utility.trim_to_flac(@original_file.path, @duration, @chunk_file.path, @start_time, @duration)
+      Utility.trim_to_flac(@original_file.path, @chunk_file.path, @start_time, @duration, @rate)
     end
 
     def to_hash

@@ -4,12 +4,13 @@ module GoogleSpeech
 
   # break wav audio into short files
   class ChunkFactory
-    attr_accessor :original_file, :chunk_duration, :overlap
+    attr_accessor :original_file, :chunk_duration, :overlap, :rate
 
-    def initialize(original_file, chunk_duration=8, overlap=1)
+    def initialize(original_file, chunk_duration, overlap, rate)
       @chunk_duration    = chunk_duration
       @original_file     = original_file
       @overlap           = overlap
+      @rate              = rate
       @original_duration = GoogleSpeech::Utility.audio_file_duration(@original_file.path)
     end
 
@@ -17,7 +18,7 @@ module GoogleSpeech
     def each
       pos = 0
       while(pos < @original_duration) do
-        chunk = Chunk.new(@original_file, @original_duration, pos, (@chunk_duration + @overlap))
+        chunk = Chunk.new(@original_file, @original_duration, pos, (@chunk_duration + @overlap), @rate)
         yield chunk
         pos = pos + [chunk.duration, @chunk_duration].min
       end
