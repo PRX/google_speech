@@ -15,7 +15,7 @@ module GoogleSpeech
       @rate              = rate
       @chunk_file        = Tempfile.new([File.basename(@original_file), '.wav'])
       # puts "@chunk_file: #{@chunk_file.path}"
-      Utility.trim_to_flac(@original_file.path, @chunk_file.path, @start_time, @duration, @rate)
+      Utility.trim_and_encode(@original_file.path, @chunk_file.path, @start_time, @duration, @rate)
     end
 
     def to_hash
