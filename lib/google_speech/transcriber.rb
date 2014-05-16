@@ -9,8 +9,10 @@ module GoogleSpeech
     attr_accessor :original_file, :options, :results
 
     DEFAULT_OPTIONS =   {
-      :key              => 'AIzaSyCnl6MRydhw_5fLXIdASxkLJzcJh5iX0M4',
-      :client           => SecureRandom.hex,
+      # :key              => 'AIzaSyCnl6MRydhw_5fLXIdASxkLJzcJh5iX0M4',
+      # :client           => SecureRandom.hex,
+      :key              => 'AIzaSyBOti4mM-6x9WDnZIjIeyEU21OpBXqWBgw',
+      :client           => 'chrome',
       :audio_type       => 'audio/l16',
       :rate             => 8000,
       :language         => 'en-us',

@@ -5,7 +5,7 @@ require 'spec_helper'
 describe GoogleSpeech::Transcriber do
 
   it 'transcribes a file' do
-    f = File.open(File.join(File.dirname(__FILE__), 'test.wav'))
+    f = File.open(File.join(File.dirname(__FILE__), '../curiouscity.wav'))
 
     transcriber = GoogleSpeech::Transcriber.new(f)
     t = transcriber.transcribe
