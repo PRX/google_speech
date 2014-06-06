@@ -8,12 +8,14 @@ module GoogleSpeech
     attr_accessor :original_file, :original_duration, :start_time, :duration, :chunk_file, :rate
 
     def initialize(original_file, original_duration, start_time, duration, rate)
+      FileUtils.mkdir_p(GoogleSpeech::TMP_FILE_DIR) unless File.exists?(GoogleSpeech::TMP_FILE_DIR)
+
       @original_file     = original_file
       @original_duration = original_duration
       @start_time        = start_time
       @duration          = [duration, (@original_duration - @start_time)].min
       @rate              = rate
-      @chunk_file        = Tempfile.new([File.basename(@original_file), '.wav'])
+      @chunk_file        = Tempfile.new([File.basename(@original_file), '.wav'], GoogleSpeech::TMP_FILE_DIR)
       # puts "@chunk_file: #{@chunk_file.path}"
       Utility.trim_and_encode(@original_file.path, @chunk_file.path, @start_time, @duration, @rate)
     end

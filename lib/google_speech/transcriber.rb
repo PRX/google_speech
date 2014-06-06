@@ -35,6 +35,7 @@ module GoogleSpeech
     def open_working_file
       Utility.check_local_file(@original_file.path)
       wf_path = random_file_name(@original_file.path)
+      FileUtils.mkdir_p(GoogleSpeech::TMP_FILE_DIR) unless File.exists?(GoogleSpeech::TMP_FILE_DIR)
       FileUtils.ln(@original_file.path, wf_path)
       File.open(wf_path, 'r') {|f|
         yield f
