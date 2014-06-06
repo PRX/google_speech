@@ -21,6 +21,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.add_dependency "excon"
+  gem.add_dependency "uuid"
 
   gem.add_development_dependency "rake"
   gem.add_development_dependency "minitest"

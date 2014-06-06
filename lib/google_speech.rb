@@ -5,6 +5,8 @@ require 'logger'
 
 module GoogleSpeech
 
+  TMP_FILE_DIR = ENV['GOOGLE_SPEECH_TMP_DIR'] || '/tmp/'
+
   def self.logger
     @_logger ||= Logger.new(STDOUT)
   end

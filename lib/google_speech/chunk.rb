@@ -33,5 +33,11 @@ module GoogleSpeech
       GoogleSpeech.logger        
     end
 
+    def close_file
+      return unless @chunk_file
+      @chunk_file.close rescue nil
+      @chunk_file.unlink rescue nil
+    end
+
   end
 end

@@ -18,9 +18,14 @@ module GoogleSpeech
     def each
       pos = 0
       while(pos < @original_duration) do
-        chunk = Chunk.new(@original_file, @original_duration, pos, (@chunk_duration + @overlap), @rate)
-        yield chunk
-        pos = pos + [chunk.duration, @chunk_duration].min
+        chunk = nil
+        begin
+          chunk = Chunk.new(@original_file, @original_duration, pos, (@chunk_duration + @overlap), @rate)
+          yield chunk
+          pos = pos + [chunk.duration, @chunk_duration].min
+        ensure
+          chunk.close_file if chunk
+        end
       end
     end
 

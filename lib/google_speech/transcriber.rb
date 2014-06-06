@@ -2,6 +2,7 @@
 
 require 'excon'
 require 'json'
+require 'uuid'
 
 module GoogleSpeech
 
@@ -31,21 +32,40 @@ module GoogleSpeech
       @last_ua = 0
     end
 
-    def transcribe
-      chunk_factory = ChunkFactory.new(@original_file, options[:chunk_duration], options[:overlap], options[:rate])
-      chunk_factory.each{ |chunk|
-        result = chunk.to_hash
-        transcript = transcribe_data(chunk.data)
-        next unless transcript
-
-        result = result.merge(extract_result(transcript))
-
-        logger.debug "#{result[:start_time]}: #{(result[:confidence].to_f * 100).to_i}%: #{result[:text]}"
-
-        @results << result
-
-        sleep(options[:request_pause].to_i)
+    def open_working_file
+      Utility.check_local_file(@original_file.path)
+      wf_path = random_file_name(@original_file.path)
+      FileUtils.ln(@original_file.path, wf_path)
+      File.open(wf_path, 'r') {|f|
+        yield f
       }
+      FileUtils.rm(wf_path, :force=>true)
+    end
+
+    def random_file_name(path)
+      fn = File.join(GoogleSpeech::TMP_FILE_DIR, File.basename(path) + '_' + UUID.generate + '.wav')
+      puts fn
+      fn
+    end
+
+    def transcribe
+      open_working_file do |working_file|
+        chunk_factory = ChunkFactory.new(working_file, options[:chunk_duration], options[:overlap], options[:rate])
+        chunk_factory.each{ |chunk|
+          result = chunk.to_hash
+          transcript = transcribe_data(chunk.data)
+          next unless transcript
+
+          result = result.merge(extract_result(transcript))
+
+          logger.debug "#{result[:start_time]}: #{(result[:confidence].to_f * 100).to_i}%: #{result[:text]}"
+
+          @results << result
+
+          sleep(options[:request_pause].to_i)
+        }
+      end
+
       @results
     end
 
