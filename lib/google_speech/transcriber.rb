@@ -43,9 +43,7 @@ module GoogleSpeech
     end
 
     def random_file_name(path)
-      fn = File.join(GoogleSpeech::TMP_FILE_DIR, File.basename(path) + '_' + UUID.generate + '.wav')
-      puts fn
-      fn
+      File.join(GoogleSpeech::TMP_FILE_DIR, File.basename(path) + '_' + UUID.generate + '.wav')
     end
 
     def transcribe
