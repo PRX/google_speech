@@ -22,7 +22,8 @@ module GoogleSpeech
       def trim_and_encode(wav_path, flac_path, start, length, rate)
         check_local_file(wav_path)
 
-        command = "sox -t wav '#{wav_path}' -t wav '#{flac_path}' norm channels 1 rate #{rate} trim #{start} #{length} compand .5,2 -80,-80,-75,-50,-30,-15,0,0"
+        command = "sox -t wav '#{wav_path}' -r 8000 -c 1 -t flac '#{flac_path}' trim #{start} #{length} compand .5,2 -80,-80,-75,-50,-30,-15,0,0 norm -0.1"
+        # command = "sox -t wav '#{wav_path}' -t wav '#{flac_path}' norm channels 1 rate #{rate} trim #{start} #{length} compand .5,2 -80,-80,-75,-50,-30,-15,0,0"
         out, err = run_command(command)
         response = out + err
         response.split("\n").each{ |l| raise("trim_and_encode: error cmd: '#{command}'\nout: '#{response}'") if l =~ SOX_ERROR_RE }

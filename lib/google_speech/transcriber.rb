@@ -13,7 +13,7 @@ module GoogleSpeech
       # :client           => SecureRandom.hex,
       :key              => 'AIzaSyBOti4mM-6x9WDnZIjIeyEU21OpBXqWBgw',
       :client           => 'chrome',
-      :audio_type       => 'audio/l16',
+      :audio_type       => 'audio/x-flac',
       :rate             => 8000,
       :language         => 'en-us',
       :chunk_duration   => 4.0,
@@ -21,7 +21,7 @@ module GoogleSpeech
       :max_results      => 1,
       :request_pause    => 0.1,
       :profanity_filter => true,
-      :retry_max        => 3
+      :retry_max        => 2
     }
 
     def initialize(original_file, options=nil)
